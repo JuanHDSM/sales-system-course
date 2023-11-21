@@ -1,0 +1,12 @@
+package com.JuanHDSM.Vendas.domain.dtos;
+
+import com.JuanHDSM.Vendas.domain.entities.Client;
+
+public record ResponseClientDTO(Long id, String name) {
+    public static ResponseClientDTO fromResponseClientDTO(Client entity) {
+        return new ResponseClientDTO(
+                entity.getId(),
+                entity.getName()
+        );
+    }
+}
