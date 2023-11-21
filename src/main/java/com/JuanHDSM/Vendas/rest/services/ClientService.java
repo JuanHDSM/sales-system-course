@@ -41,7 +41,7 @@ public class ClientService {
         return ResponseClientDTO.fromResponseClientDTO(entity);
     }
 
-    public void updateData(Client entity, RequestClientDTO obj) {
+    private void updateData(Client entity, RequestClientDTO obj) {
         entity.setName(obj.name());
     }
 }
