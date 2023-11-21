@@ -1,5 +1,6 @@
 package com.JuanHDSM.Vendas.domain.entities;
 
+import com.JuanHDSM.Vendas.domain.dtos.RequestClientDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +20,8 @@ public class Client {
     private String name;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Set<Order> orders;
+
+    public Client(RequestClientDTO obj) {
+        this.name = obj.name();
+    }
 }
