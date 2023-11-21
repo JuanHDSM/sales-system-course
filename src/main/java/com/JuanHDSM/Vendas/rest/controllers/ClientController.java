@@ -6,7 +6,9 @@ import com.JuanHDSM.Vendas.rest.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -15,31 +17,32 @@ public class ClientController {
     @Autowired
     ClientService service;
     @GetMapping
-    public ResponseEntity findAll() {
+    public ResponseEntity<List<ResponseClientDTO>> findAll() {
         List<ResponseClientDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity findById(@PathVariable Long id) {
+    public ResponseEntity<ResponseClientDTO> findById(@PathVariable Long id) {
         ResponseClientDTO obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping
-    public ResponseEntity insert(@RequestBody RequestClientDTO obj) {
+    public ResponseEntity<ResponseClientDTO> insert(@RequestBody RequestClientDTO obj) {
         ResponseClientDTO entity = service.insert(obj);
-        return ResponseEntity.ok().body(entity);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.id()).toUri();
+        return ResponseEntity.created(uri).body(entity);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody RequestClientDTO obj) {
+    public ResponseEntity<ResponseClientDTO> update(@PathVariable Long id, @RequestBody RequestClientDTO obj) {
         ResponseClientDTO objDTO = service.update(id, obj);
         return ResponseEntity.ok().body(objDTO);
     }
