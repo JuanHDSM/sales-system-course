@@ -1,5 +1,6 @@
 package com.JuanHDSM.Vendas.domain.entities;
 
+import com.JuanHDSM.Vendas.domain.dtos.RequestProductDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +20,9 @@ public class Product {
     private String description;
     @Column(precision = 20, scale = 2)
     private BigDecimal price;
+
+    public Product(RequestProductDTO obj) {
+        this.description = obj.description();
+        this.price = obj.price();
+    }
 }

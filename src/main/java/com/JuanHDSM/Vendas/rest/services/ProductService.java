@@ -1,5 +1,6 @@
 package com.JuanHDSM.Vendas.rest.services;
 
+import com.JuanHDSM.Vendas.domain.dtos.RequestProductDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseProductDTO;
 import com.JuanHDSM.Vendas.domain.entities.Product;
 import com.JuanHDSM.Vendas.domain.repositories.ProductRepository;
@@ -19,6 +20,12 @@ public class ProductService {
 
     public ResponseProductDTO findById(Long id) {
         Product entity = repository.findById(id).get();
+        return ResponseProductDTO.fromResponseProductDTO(entity);
+    }
+
+    public ResponseProductDTO insert(RequestProductDTO obj) {
+        Product entity = new Product(obj);
+        repository.save(entity);
         return ResponseProductDTO.fromResponseProductDTO(entity);
     }
 }
