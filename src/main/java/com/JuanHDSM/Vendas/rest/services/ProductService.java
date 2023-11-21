@@ -12,9 +12,13 @@ import java.util.List;
 public class ProductService {
     @Autowired
     ProductRepository repository;
-
     public List<ResponseProductDTO> findAll() {
         List<Product> list = repository.findAll();
         return list.stream().map(ResponseProductDTO::fromResponseProductDTO).toList();
+    }
+
+    public ResponseProductDTO findById(Long id) {
+        Product entity = repository.findById(id).get();
+        return ResponseProductDTO.fromResponseProductDTO(entity);
     }
 }
