@@ -28,4 +28,8 @@ public class ProductService {
         repository.save(entity);
         return ResponseProductDTO.fromResponseProductDTO(entity);
     }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
 }
