@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity
+@Entity(name = "tb_clients")
 @Table(name = "tb_clients")
 public class Client {
     @Id

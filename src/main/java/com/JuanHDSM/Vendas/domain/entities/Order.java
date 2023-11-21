@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +25,6 @@ public class Order {
     @Column(precision = 20, scale = 2)
     private BigDecimal total;
     @OneToMany(mappedBy = "order")
-    private List<OrderItem> items;
+    private Set<OrderItem> items;
 
 }
