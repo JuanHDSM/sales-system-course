@@ -32,4 +32,16 @@ public class ProductService {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    public ResponseProductDTO update(Long id, RequestProductDTO obj) {
+        Product entity = repository.getReferenceById(id);
+        updateDate(entity, obj);
+        repository.save(entity);
+        return ResponseProductDTO.fromResponseProductDTO(entity);
+    }
+
+    private void updateDate(Product entity, RequestProductDTO obj) {
+        entity.setDescription(obj.description());
+        entity.setPrice(obj.price());
+    }
 }
