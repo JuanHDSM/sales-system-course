@@ -4,7 +4,7 @@ import com.JuanHDSM.Vendas.domain.entities.Product;
 
 import java.math.BigDecimal;
 
-public record ResponseProductDTO(Long id, String description, BigDecimal price) {
+public record ResponseProductDTO(Long id, String description, Double price) {
     public static ResponseProductDTO fromResponseProductDTO(Product entity) {
         return new ResponseProductDTO(
                 entity.getId(),
