@@ -1,10 +1,13 @@
 package com.JuanHDSM.Vendas.domain.entities;
 
 import com.JuanHDSM.Vendas.domain.dtos.RequestProductDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,8 +21,17 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    @Column(precision = 20, scale = 2)
-    private BigDecimal price;
+    private Double price;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
+
+    public Product(Long id, String description, Double price) {
+        this.id = id;
+        this.description = description;
+        this.price = price;
+    }
 
     public Product(RequestProductDTO obj) {
         this.description = obj.description();
