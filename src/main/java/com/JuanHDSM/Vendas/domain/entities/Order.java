@@ -1,10 +1,10 @@
 package com.JuanHDSM.Vendas.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -15,7 +15,10 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "tb_orders")
-public class Order {
+public class Order implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +34,12 @@ public class Order {
         this.id = id;
         this.client = client;
         this.orderDate = orderDate;
+    }
+
+    public Order(Client client, LocalDate orderDate, Set<OrderItem> items) {
+        this.client = client;
+        this.orderDate = orderDate;
+        this.items = items;
     }
 
     public Double getTotal() {

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -14,16 +16,20 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "tb_clients")
 @Table(name = "tb_clients")
-public class Client {
+public class Client implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @JsonIgnore
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Order> orders;
 
     public Client(RequestClientDTO obj) {
         this.name = obj.name();
     }
+
 }

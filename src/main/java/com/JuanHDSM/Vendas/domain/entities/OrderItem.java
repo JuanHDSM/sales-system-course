@@ -2,8 +2,13 @@ package com.JuanHDSM.Vendas.domain.entities;
 
 import com.JuanHDSM.Vendas.domain.pk.OrderItemPK;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -12,7 +17,9 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "tb_items")
-public class OrderItem {
+public class OrderItem implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -24,6 +31,11 @@ public class OrderItem {
         id.setOrder(order);
         id.setProduct(product);
         this.quantity = quantity;
+    }
+
+    public OrderItem(Order order, Product product) {
+        id.setOrder(order);
+        id.setProduct(product);
     }
 
     @JsonIgnore
