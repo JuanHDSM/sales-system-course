@@ -2,6 +2,7 @@ package com.JuanHDSM.Vendas.rest.services;
 
 import com.JuanHDSM.Vendas.domain.dtos.RequestOrderDTO;
 import com.JuanHDSM.Vendas.domain.dtos.RequestOrderItemDTO;
+import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderByClientDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderDTO;
 import com.JuanHDSM.Vendas.domain.entities.Client;
 import com.JuanHDSM.Vendas.domain.entities.Order;
@@ -41,14 +42,14 @@ public class OrderService {
         return ResponseOrderDTO.fromResponseOrderDTO(entity);
     }
 
-    public List<ResponseOrderDTO> findByClient(Long id) {
-        Client client = clientRepository.getReferenceById(id);
+    public List<ResponseOrderByClientDTO> findByClient(Long id) {
+        Client client = clientRepository.findById(id).get();
         List<Order> list = repository.findByClient(client);
-        return list.stream().map(ResponseOrderDTO::fromResponseOrderDTO).toList();
+        return list.stream().map(ResponseOrderByClientDTO::fromResponseOrderDTO).toList();
     }
 
     public ResponseOrderDTO insert(RequestOrderDTO obj) {
-        Client client = clientRepository.getReferenceById(obj.clientId());
+        Client client = clientRepository.findById(obj.clientId()).get();
         Set<OrderItem> items = new HashSet<>();
         Order entity = new Order(client, LocalDate.now(), items);
         repository.save(entity);

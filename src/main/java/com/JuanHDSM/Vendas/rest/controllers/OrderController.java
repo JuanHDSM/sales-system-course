@@ -2,6 +2,7 @@ package com.JuanHDSM.Vendas.rest.controllers;
 
 import com.JuanHDSM.Vendas.domain.dtos.RequestOrderDTO;
 import com.JuanHDSM.Vendas.domain.dtos.RequestOrderItemDTO;
+import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderByClientDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderDTO;
 import com.JuanHDSM.Vendas.rest.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class OrderController {
     }
 
     @GetMapping("/client/{id}")
-    public ResponseEntity<List<ResponseOrderDTO>> findByClient(@PathVariable Long id) {
-        List<ResponseOrderDTO> list = service.findByClient(id);
+    public ResponseEntity<List<ResponseOrderByClientDTO>> findByClient(@PathVariable Long id) {
+        List<ResponseOrderByClientDTO> list = service.findByClient(id);
         return ResponseEntity.ok().body(list);
     }
 
