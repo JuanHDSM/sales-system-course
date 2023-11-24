@@ -49,6 +49,5 @@ public class TestConfig implements CommandLineRunner {
         OrderItem oi1 = new OrderItem(o, p1, 2);
 
         orderItemRepository.saveAll(Arrays.asList(oi, oi1));
-
     }
 }

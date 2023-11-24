@@ -1,15 +1,15 @@
 package com.JuanHDSM.Vendas.rest.controllers;
 
+import com.JuanHDSM.Vendas.domain.dtos.RequestOrderDTO;
+import com.JuanHDSM.Vendas.domain.dtos.RequestOrderItemDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderDTO;
-import com.JuanHDSM.Vendas.domain.entities.Order;
 import com.JuanHDSM.Vendas.rest.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -29,5 +29,28 @@ public class OrderController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/client/{id}")
+    public ResponseEntity<List<ResponseOrderDTO>> findByClient(@PathVariable Long id) {
+        List<ResponseOrderDTO> list = service.findByClient(id);
+        return ResponseEntity.ok().body(list);
+    }
 
+    @PostMapping
+    public ResponseEntity<ResponseOrderDTO> insert(@RequestBody RequestOrderDTO idClient) {
+        ResponseOrderDTO obj = service.insert(idClient);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.id()).toUri();
+        return ResponseEntity.ok().body(obj);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/order-item")
+    public ResponseEntity<ResponseOrderDTO> insertOrderItem(@RequestBody RequestOrderItemDTO obj) {
+        ResponseOrderDTO objDTO = service.insertOrderItem(obj);
+        return ResponseEntity.ok().body(objDTO);
+    }
 }
