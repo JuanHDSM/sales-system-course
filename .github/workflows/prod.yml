@@ -33,4 +33,4 @@ jobs:
           - name: Pull img from docker hub
             run: sudo docker pull juanholy/sales-system:latest
           - name: Run docker container
-            run: docker run -d -p 8080:8080 --name sales-system juanholy/sales-system
+            run: sudo docker run -d -p 8080:8080 --name sales-system juanholy/sales-system
