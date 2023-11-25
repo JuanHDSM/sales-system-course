@@ -20,7 +20,7 @@ jobs:
           - name: Build project
             run: mvn clean install -DskipTests
           - name: Login Docker hub
-            run: docker login -u ${{secrets.DOCKER_USERNAME}} -P ${{secret.DOCKER_PASSWORD}}
+            run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secret.DOCKER_PASSWORD}}
           - name: Build docker image
             run: docker build -t juanholy/sales-system .
           - name: Push image docker
