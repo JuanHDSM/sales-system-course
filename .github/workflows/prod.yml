@@ -25,3 +25,12 @@ jobs:
             run: docker build -t juanholy/sales-system .
           - name: Push image docker
             run: docker push juanholy/sales-system
+
+    deploy:
+        needs: build
+        runs-on: self-hosted
+        steps:
+          - name: Pull img fromo docker hub
+            run: docker pull juanholy/sales-system:latest
+          - name: Run docker container
+            run: docker run -d -p 8080:8080 --name sales-system juanholy/sales-system
