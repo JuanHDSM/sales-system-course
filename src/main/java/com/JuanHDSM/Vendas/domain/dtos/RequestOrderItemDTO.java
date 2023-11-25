@@ -4,6 +4,5 @@ public record RequestOrderItemDTO(
         Long orderId,
         Long productId,
         int quantity
-
 ) {
 }
