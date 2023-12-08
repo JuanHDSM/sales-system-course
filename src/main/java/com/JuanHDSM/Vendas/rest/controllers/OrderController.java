@@ -6,11 +6,9 @@ import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderByClientDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderDTO;
 import com.JuanHDSM.Vendas.rest.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,39 +17,35 @@ public class OrderController {
     @Autowired
     OrderService service;
     @GetMapping
-    public ResponseEntity<List<ResponseOrderDTO>> findAll() {
-        List<ResponseOrderDTO> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public List<ResponseOrderDTO> findAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseOrderDTO> findById(@PathVariable Long id) {
-        ResponseOrderDTO obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+    public ResponseOrderDTO findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @GetMapping("/client/{id}")
-    public ResponseEntity<List<ResponseOrderByClientDTO>> findByClient(@PathVariable Long id) {
-        List<ResponseOrderByClientDTO> list = service.findByClient(id);
-        return ResponseEntity.ok().body(list);
+    public List<ResponseOrderByClientDTO> findByClient(@PathVariable Long id) {
+        return service.findByClient(id);
     }
 
     @PostMapping
-    public ResponseEntity<ResponseOrderDTO> insert(@RequestBody RequestOrderDTO idClient) {
-        ResponseOrderDTO obj = service.insert(idClient);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.id()).toUri();
-        return ResponseEntity.ok().body(obj);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseOrderDTO insert(@RequestBody RequestOrderDTO idClient) {
+        return service.insert(idClient);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/order-item")
-    public ResponseEntity<ResponseOrderDTO> insertOrderItem(@RequestBody RequestOrderItemDTO obj) {
-        ResponseOrderDTO objDTO = service.insertOrderItem(obj);
-        return ResponseEntity.ok().body(objDTO);
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseOrderDTO insertOrderItem(@RequestBody RequestOrderItemDTO obj) {
+        return service.insertOrderItem(obj);
     }
 }

@@ -14,7 +14,9 @@ import com.JuanHDSM.Vendas.domain.repositories.OrderItemRepository;
 import com.JuanHDSM.Vendas.domain.repositories.OrderRepository;
 import com.JuanHDSM.Vendas.domain.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -38,18 +40,27 @@ public class OrderService {
     }
 
     public ResponseOrderDTO findById(Long id) {
-        Order entity = repository.findById(id).get();
+        Order entity = repository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+
         return ResponseOrderDTO.fromResponseOrderDTO(entity);
     }
 
     public List<ResponseOrderByClientDTO> findByClient(Long id) {
-        Client client = clientRepository.findById(id).get();
+        Client client = clientRepository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+
         List<Order> list = repository.findByClient(client);
         return list.stream().map(ResponseOrderByClientDTO::fromResponseOrderDTO).toList();
     }
 
     public ResponseOrderDTO insert(RequestOrderDTO obj) {
-        Client client = clientRepository.findById(obj.clientId()).get();
+        Client client = clientRepository.findById(obj.clientId())
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+
         Set<OrderItem> items = new HashSet<>();
         Order entity = new Order(client, LocalDate.now(), items);
         repository.save(entity);
@@ -58,20 +69,32 @@ public class OrderService {
 
     public void delete(Long id) {
         repository.deleteById(id);
+        if(!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado");
+        }
     }
 
     public ResponseOrderDTO insertOrderItem(RequestOrderItemDTO obj) {
-        Order order = repository.findById(obj.orderId()).get();
-        Product product = productRepository.findById(obj.productId()).get();
+        Order order = repository.findById(obj.orderId())
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+
+        Product product = productRepository.findById(obj.productId())
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Produto não encontrado"));
+
         OrderItemPK id = new OrderItemPK();
         id.setOrder(order);
         id.setProduct(product);
+
         OrderItem item = new OrderItem(id, obj.quantity());
+
         if(item.getQuantity() <= 0) {
             orderItemRepository.delete(item);
         } else {
             orderItemRepository.save(item);
         }
+
         return ResponseOrderDTO.fromResponseOrderDTO(order);
     }
 }

@@ -5,9 +5,12 @@ import com.JuanHDSM.Vendas.domain.dtos.ResponseClientDTO;
 import com.JuanHDSM.Vendas.domain.entities.Client;
 import com.JuanHDSM.Vendas.domain.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -20,8 +23,10 @@ public class ClientService {
     }
 
     public ResponseClientDTO findById(Long id) {
-        Client entity = repository.findById(id).get();
-        return ResponseClientDTO.fromResponseClientDTO(entity);
+        Optional<Client> entity = repository.findById(id);
+        return ResponseClientDTO.fromResponseClientDTO
+                (entity.orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Cliente não encontrado")));
     }
 
     public ResponseClientDTO insert(RequestClientDTO obj) {
@@ -32,13 +37,18 @@ public class ClientService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+        }
     }
 
     public ResponseClientDTO update(Long id, RequestClientDTO obj) {
-        Client entity = repository.getReferenceById(id);
-        updateData(entity, obj);
-        repository.save(entity);
-        return ResponseClientDTO.fromResponseClientDTO(entity);
+        Optional<Client> entity = repository.findById(id);
+        updateData(entity.get(), obj);
+        repository.save(entity.get());
+        return ResponseClientDTO.fromResponseClientDTO
+                (entity.orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Cliente não encontrado")));
     }
 
     private void updateData(Client entity, RequestClientDTO obj) {
