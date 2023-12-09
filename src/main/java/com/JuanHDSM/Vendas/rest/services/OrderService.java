@@ -89,10 +89,10 @@ public class OrderService {
 
         OrderItem item = new OrderItem(id, obj.quantity());
 
+        orderItemRepository.save(item);
+
         if(item.getQuantity() <= 0) {
             orderItemRepository.delete(item);
-        } else {
-            orderItemRepository.save(item);
         }
 
         return ResponseOrderDTO.fromResponseOrderDTO(order);
