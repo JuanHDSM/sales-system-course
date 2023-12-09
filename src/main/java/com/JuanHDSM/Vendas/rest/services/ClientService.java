@@ -23,10 +23,11 @@ public class ClientService {
     }
 
     public ResponseClientDTO findById(Long id) {
-        Optional<Client> entity = repository.findById(id);
-        return ResponseClientDTO.fromResponseClientDTO
-                (entity.orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Cliente não encontrado")));
+        Client entity = repository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+
+        return ResponseClientDTO.fromResponseClientDTO(entity);
     }
 
     public ResponseClientDTO insert(RequestClientDTO obj) {
@@ -42,16 +43,17 @@ public class ClientService {
         }
     }
 
-    public ResponseClientDTO update(Long id, RequestClientDTO obj) {
-        Optional<Client> entity = repository.findById(id);
-        updateData(entity.get(), obj);
-        repository.save(entity.get());
-        return ResponseClientDTO.fromResponseClientDTO
-                (entity.orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Cliente não encontrado")));
-    }
+    public ResponseClientDTO update(Long id, RequestClientDTO objDTO) {
+        Client obj = new Client(objDTO);
+        Client entity = repository.findById(id)
+                .map(c -> {
+                    obj.setId(c.getId());
+                    repository.save(obj);
+                    return obj;
+                })
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
-    private void updateData(Client entity, RequestClientDTO obj) {
-        entity.setName(obj.name());
+        return ResponseClientDTO.fromResponseClientDTO(entity);
     }
 }

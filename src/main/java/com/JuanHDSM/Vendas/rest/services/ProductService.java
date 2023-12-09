@@ -37,17 +37,18 @@ public class ProductService {
         repository.deleteById(id);
     }
 
-    public ResponseProductDTO update(Long id, RequestProductDTO obj) {
+    public ResponseProductDTO update(Long id, RequestProductDTO objDTO) {
+        Product obj = new Product(objDTO);
         Product entity = repository.findById(id)
+                .map( p -> {
+                    obj.setId(p.getId());
+                    repository.save(obj);
+                    return obj;
+                })
                 .orElseThrow( () -> new ResponseStatusException
                         (HttpStatus.NOT_FOUND, "Produto não encontrado"));
-        updateDate(entity, obj);
-        repository.save(entity);
+
         return ResponseProductDTO.fromResponseProductDTO(entity);
     }
 
-    private void updateDate(Product entity, RequestProductDTO obj) {
-        entity.setDescription(obj.description());
-        entity.setPrice(obj.price());
-    }
 }
