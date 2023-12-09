@@ -4,11 +4,9 @@ import com.JuanHDSM.Vendas.domain.dtos.RequestProductDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseProductDTO;
 import com.JuanHDSM.Vendas.rest.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,36 +17,32 @@ public class ProductController {
     ProductService service;
 
     @GetMapping
-    public ResponseEntity<List<ResponseProductDTO>> findAll() {
-        List<ResponseProductDTO> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public List<ResponseProductDTO> findAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseProductDTO> findById(@PathVariable Long id) {
-        ResponseProductDTO obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+    public ResponseProductDTO findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<ResponseProductDTO> insert(@RequestBody RequestProductDTO obj) {
-        ResponseProductDTO objDTO = service.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objDTO.id()).toUri();
-        return ResponseEntity.created(uri).body(objDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseProductDTO insert(@RequestBody RequestProductDTO obj) {
+        return service.insert(obj);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         service.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseProductDTO> update(
+    public ResponseProductDTO update(
             @PathVariable Long id,
             @RequestBody RequestProductDTO obj
     ) {
-        ResponseProductDTO objDTO = service.update(id, obj);
-        return ResponseEntity.ok().body(objDTO);
+        return service.update(id, obj);
     }
 }

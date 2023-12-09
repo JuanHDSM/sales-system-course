@@ -5,7 +5,9 @@ import com.JuanHDSM.Vendas.domain.dtos.ResponseProductDTO;
 import com.JuanHDSM.Vendas.domain.entities.Product;
 import com.JuanHDSM.Vendas.domain.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,7 +21,9 @@ public class ProductService {
     }
 
     public ResponseProductDTO findById(Long id) {
-        Product entity = repository.findById(id).get();
+        Product entity = repository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Produto não encontrado"));
         return ResponseProductDTO.fromResponseProductDTO(entity);
     }
 
@@ -34,7 +38,9 @@ public class ProductService {
     }
 
     public ResponseProductDTO update(Long id, RequestProductDTO obj) {
-        Product entity = repository.getReferenceById(id);
+        Product entity = repository.findById(id)
+                .orElseThrow( () -> new ResponseStatusException
+                        (HttpStatus.NOT_FOUND, "Produto não encontrado"));
         updateDate(entity, obj);
         repository.save(entity);
         return ResponseProductDTO.fromResponseProductDTO(entity);
