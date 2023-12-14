@@ -43,10 +43,6 @@ public class Order implements Serializable {
     }
 
     public Double getTotal() {
-        Double sum = 0.0;
-        for(OrderItem x : items) {
-            sum += x.getSubTotal();
-        }
-        return sum;
+        return items.stream().map(OrderItem::getSubTotal).reduce(0.0, (Double::sum));
     }
 }
