@@ -31,6 +31,11 @@ public class ClientService {
 
     public ResponseClientDTO insert(RequestClientDTO obj) {
         Client entity = new Client(obj);
+        if (findAll().stream().map(ResponseClientDTO::cpf).anyMatch(cpf -> cpf.equalsIgnoreCase(entity.getCpf()))){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "CPF já cadastrado."
+            );
+        }
         repository.save(entity);
         return ResponseClientDTO.fromResponseClientDTO(entity);
     }
