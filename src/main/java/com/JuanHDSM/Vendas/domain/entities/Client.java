@@ -24,12 +24,15 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(length = 11, unique = true)
+    private String cpf;
     @JsonIgnore
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Order> orders;
 
     public Client(RequestClientDTO obj) {
         this.name = obj.name();
+        this.cpf = obj.cpf();
     }
 
 }
