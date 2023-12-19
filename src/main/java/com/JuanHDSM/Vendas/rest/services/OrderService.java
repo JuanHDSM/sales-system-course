@@ -59,7 +59,7 @@ public class OrderService {
     public ResponseOrderDTO insert(RequestOrderDTO obj) {
         Client client = clientRepository.findById(obj.clientId())
                 .orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+                        (HttpStatus.BAD_REQUEST, "Cliente não encontrado na base de dados"));
 
         Set<OrderItem> items = new HashSet<>();
         Order entity = new Order(client, LocalDate.now(), items);
@@ -77,11 +77,11 @@ public class OrderService {
     public ResponseOrderDTO insertOrderItem(RequestOrderItemDTO obj) {
         Order order = repository.findById(obj.orderId())
                 .orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+                        (HttpStatus.BAD_REQUEST, "Pedido não encontrado"));
 
         Product product = productRepository.findById(obj.productId())
                 .orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                        (HttpStatus.BAD_REQUEST, "Código do produto inválido: " + obj.productId()));
 
         OrderItemPK id = new OrderItemPK();
         id.setOrder(order);
