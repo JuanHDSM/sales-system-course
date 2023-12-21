@@ -3,6 +3,7 @@ package com.JuanHDSM.Vendas.rest.controllers;
 import com.JuanHDSM.Vendas.domain.dtos.RequestClientDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseClientDTO;
 import com.JuanHDSM.Vendas.rest.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseClientDTO insert(@RequestBody RequestClientDTO obj) {
+    public ResponseClientDTO insert(@RequestBody @Valid RequestClientDTO obj) {
         return service.insert(obj);
     }
 

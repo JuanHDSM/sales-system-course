@@ -13,6 +13,7 @@ import com.JuanHDSM.Vendas.domain.repositories.ClientRepository;
 import com.JuanHDSM.Vendas.domain.repositories.OrderItemRepository;
 import com.JuanHDSM.Vendas.domain.repositories.OrderRepository;
 import com.JuanHDSM.Vendas.domain.repositories.ProductRepository;
+import com.JuanHDSM.Vendas.exception.BusinessRulesException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -58,8 +59,7 @@ public class OrderService {
 
     public ResponseOrderDTO insert(RequestOrderDTO obj) {
         Client client = clientRepository.findById(obj.clientId())
-                .orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.BAD_REQUEST, "Cliente não encontrado na base de dados"));
+                .orElseThrow(() -> new BusinessRulesException("Código de cliente inválido."));
 
         Set<OrderItem> items = new HashSet<>();
         Order entity = new Order(client, LocalDate.now(), items);
@@ -76,12 +76,12 @@ public class OrderService {
 
     public ResponseOrderDTO insertOrderItem(RequestOrderItemDTO obj) {
         Order order = repository.findById(obj.orderId())
-                .orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.BAD_REQUEST, "Pedido não encontrado"));
+                .orElseThrow( () -> new BusinessRulesException
+                        ( "Pedido não encontrado"));
 
         Product product = productRepository.findById(obj.productId())
-                .orElseThrow( () -> new ResponseStatusException
-                        (HttpStatus.BAD_REQUEST, "Código do produto inválido: " + obj.productId()));
+                .orElseThrow( () -> new BusinessRulesException
+                        ("Código do produto inválido: " + obj.productId()));
 
         OrderItemPK id = new OrderItemPK();
         id.setOrder(order);

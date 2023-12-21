@@ -3,6 +3,7 @@ package com.JuanHDSM.Vendas.domain.entities;
 import com.JuanHDSM.Vendas.domain.dtos.RequestClientDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.io.Serial;
@@ -23,6 +24,8 @@ public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty(message = "Campo nome é obrigatório")
     private String name;
     @Column(length = 11, unique = true)
     private String cpf;
