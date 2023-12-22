@@ -38,7 +38,7 @@ public class ClientController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseClientDTO update(@PathVariable Long id, @RequestBody RequestClientDTO obj) {
+    public ResponseClientDTO update(@PathVariable Long id, @RequestBody @Valid RequestClientDTO obj) {
         return service.update(id, obj);
     }
 }

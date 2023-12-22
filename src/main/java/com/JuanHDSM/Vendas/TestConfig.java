@@ -30,8 +30,8 @@ public class TestConfig implements CommandLineRunner {
     OrderRepository orderRepository;
     @Override
     public void run(String... args) throws Exception {
-        Client c = new Client(null, "Ciclano","11111111111", null);
-        Client c1 = new Client(null, "Fulano", "11111111112", null);
+        Client c = new Client(null, "Ciclano","70262167247", null);
+        Client c1 = new Client(null, "Fulano", "05199815296", null);
 
         clientRepository.saveAll(Arrays.asList(c, c1));
 

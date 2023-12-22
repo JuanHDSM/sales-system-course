@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -25,8 +26,11 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Campo nome é obrigatório")
+    @NotEmpty(message = "Campo nome é obrigatório.")
     private String name;
+
+    @NotEmpty(message = "Campo CPF é obrigatório")
+    @CPF(message = "Informe um CPF válido.")
     @Column(length = 11, unique = true)
     private String cpf;
     @JsonIgnore

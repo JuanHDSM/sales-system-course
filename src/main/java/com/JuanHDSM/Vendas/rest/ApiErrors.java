@@ -2,7 +2,7 @@ package com.JuanHDSM.Vendas.rest;
 
 import lombok.Getter;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class ApiErrors {
@@ -15,6 +15,8 @@ public class ApiErrors {
     }
 
     public ApiErrors(String errorMsg) {
-        this.errors = Collections.singletonList(errorMsg);
+        this.errors = Arrays.asList(errorMsg);
     }
+
+
 }
