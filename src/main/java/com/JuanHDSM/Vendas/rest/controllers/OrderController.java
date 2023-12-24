@@ -5,6 +5,7 @@ import com.JuanHDSM.Vendas.domain.dtos.RequestOrderItemDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderByClientDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseOrderDTO;
 import com.JuanHDSM.Vendas.rest.services.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseOrderDTO insert(@RequestBody RequestOrderDTO idClient) {
+    public ResponseOrderDTO insert(@RequestBody @Valid RequestOrderDTO idClient) {
         return service.insert(idClient);
     }
 
@@ -45,7 +46,7 @@ public class OrderController {
 
     @PostMapping("/order-item")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseOrderDTO insertOrderItem(@RequestBody RequestOrderItemDTO obj) {
+    public ResponseOrderDTO insertOrderItem(@RequestBody @Valid RequestOrderItemDTO obj) {
         return service.insertOrderItem(obj);
     }
 }
