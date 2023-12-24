@@ -1,6 +1,7 @@
 package com.JuanHDSM.Vendas.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -42,6 +43,7 @@ public class Order implements Serializable {
         this.items = items;
     }
 
+    @NotNull(message = "Campo total do pedido é obrigatório.")
     public Double getTotal() {
         return items.stream().map(OrderItem::getSubTotal).reduce(0.0, (Double::sum));
     }
