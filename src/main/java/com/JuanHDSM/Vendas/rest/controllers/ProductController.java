@@ -3,6 +3,7 @@ package com.JuanHDSM.Vendas.rest.controllers;
 import com.JuanHDSM.Vendas.domain.dtos.RequestProductDTO;
 import com.JuanHDSM.Vendas.domain.dtos.ResponseProductDTO;
 import com.JuanHDSM.Vendas.rest.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseProductDTO insert(@RequestBody RequestProductDTO obj) {
+    public ResponseProductDTO insert(@RequestBody @Valid RequestProductDTO obj) {
         return service.insert(obj);
     }
 
@@ -41,7 +42,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseProductDTO update(
             @PathVariable Long id,
-            @RequestBody RequestProductDTO obj
+            @RequestBody @Valid RequestProductDTO obj
     ) {
         return service.update(id, obj);
     }
