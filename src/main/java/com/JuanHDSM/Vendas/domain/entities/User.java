@@ -1,5 +1,6 @@
 package com.JuanHDSM.Vendas.domain.entities;
 
+import com.JuanHDSM.Vendas.domain.dtos.RequestUserDTO;
 import com.JuanHDSM.Vendas.domain.entities.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,17 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    public User(RequestUserDTO obj) {
+        this.username = obj.username();
+        this.password = obj.password();
+        this.role = obj.role();
+    }
+
+    public User(String username, String password, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
