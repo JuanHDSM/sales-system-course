@@ -24,19 +24,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Column(unique = true)
-    private String username;
+    private String login;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(RequestUserDTO obj) {
-        this.username = obj.username();
+        this.login = obj.login();
         this.password = obj.password();
         this.role = obj.role();
     }
 
-    public User(String username, String password, UserRole role) {
-        this.username = username;
+    public User(String login, String password, UserRole role) {
+        this.login = login;
         this.password = password;
         this.role = role;
     }
@@ -45,6 +45,11 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
     }
 
     @Override

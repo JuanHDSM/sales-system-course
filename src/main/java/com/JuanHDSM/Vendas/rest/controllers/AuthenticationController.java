@@ -16,12 +16,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("auth")
-public class AuthorizationController {
+public class AuthenticationController {
     @Autowired
     private UserService service;
     @Autowired
@@ -38,24 +39,27 @@ public class AuthorizationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
-        var auth = authenticationManager.authenticate((usernamePassword));
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public LoginResponseDTO login(@RequestBody @Valid AuthenticationDTO data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var auth = authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+
+        return new LoginResponseDTO(token);
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity register(@RequestBody @Valid RequestUserDTO data) {
-        if (this.repository.findByUsername(data.username()) != null) return ResponseEntity.badRequest().build();
+    public ResponseUserDTO register(@RequestBody @Valid RequestUserDTO user) {
+        if (this.repository.findByLogin(user.login()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já cadastrado");
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
 
-        this.service.insert(data);
+        User newUser = new User(user.login(), encryptedPassword, user.role());
 
-        return ResponseEntity.ok().build();
+        this.service.insert(newUser);
 
+        return ResponseUserDTO.fromResponseUserDTO(newUser);
     }
 }

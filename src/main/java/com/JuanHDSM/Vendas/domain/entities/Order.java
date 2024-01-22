@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity
+@Entity(name = "tb_orders")
 @Table(name = "tb_orders")
 public class Order implements Serializable {
     @Serial
