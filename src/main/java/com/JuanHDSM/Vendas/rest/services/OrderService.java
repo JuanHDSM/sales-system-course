@@ -77,7 +77,7 @@ public class OrderService {
     public ResponseOrderDTO insertOrderItem(RequestOrderItemDTO obj) {
         Order order = repository.findById(obj.orderId())
                 .orElseThrow( () -> new BusinessRulesException
-                        ( "Pedido não encontrado"));
+                        ("Pedido não encontrado"));
 
         Product product = productRepository.findById(obj.productId())
                 .orElseThrow( () -> new BusinessRulesException
