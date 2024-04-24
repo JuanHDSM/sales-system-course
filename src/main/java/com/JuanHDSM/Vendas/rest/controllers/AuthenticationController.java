@@ -1,6 +1,6 @@
 package com.JuanHDSM.Vendas.rest.controllers;
 
-import com.JuanHDSM.Vendas.config.infra.TokenService;
+import com.JuanHDSM.Vendas.config.infra.security.TokenService;
 import com.JuanHDSM.Vendas.domain.dtos.AuthenticationDTO;
 import com.JuanHDSM.Vendas.domain.dtos.LoginResponseDTO;
 import com.JuanHDSM.Vendas.domain.dtos.RequestUserDTO;
@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping(value = "/auth")
 public class AuthenticationController {
     @Autowired
     private UserService service;
@@ -53,6 +53,17 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseUserDTO register(@RequestBody @Valid RequestUserDTO user) {
         if (this.repository.findByLogin(user.login()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já cadastrado");
+
+        if (!user.password().matches("^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^\\w\\s]).{8,}$")) {
+            throw new RuntimeException(
+                    "Senha precisa ser maior que 8 caracteres.\n" +
+                    "Senha precisa ter pelo menos um número.\n" +
+                    "Senha precisa ter pelomenos uma letra.\n" +
+                    "Senha precisa ter pelo menos um caractere especial.");
+        }
+        if (!user.password().equals(user.passwordConfirm())) {
+            throw new RuntimeException("As senhas não coincidem");
+        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
 

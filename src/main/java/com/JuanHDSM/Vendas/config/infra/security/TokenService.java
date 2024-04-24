@@ -1,4 +1,4 @@
-package com.JuanHDSM.Vendas.config.infra;
+package com.JuanHDSM.Vendas.config.infra.security;
 
 import com.JuanHDSM.Vendas.domain.entities.User;
 import com.auth0.jwt.JWT;
@@ -45,6 +45,6 @@ public class TokenService {
     }
 
     private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-04:00"));
+        return LocalDateTime.now().plusHours(8).toInstant(ZoneOffset.of("-04:00"));
     }
 }

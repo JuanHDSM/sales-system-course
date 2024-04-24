@@ -1,4 +1,4 @@
-package com.JuanHDSM.Vendas.config.infra;
+package com.JuanHDSM.Vendas.config.infra.security;
 
 import com.JuanHDSM.Vendas.domain.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
