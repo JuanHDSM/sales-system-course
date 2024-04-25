@@ -14,6 +14,13 @@ spring:
     username: root
     password: root
     driverClassName: com.mysql.cj.jdbc.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 856857708464-1grc5v5gdkihf9456civu19pribp8q0p.apps.googleusercontent.com
+            clientSecret: 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
 
   jpa:
     properties:
@@ -21,6 +28,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+        dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
 

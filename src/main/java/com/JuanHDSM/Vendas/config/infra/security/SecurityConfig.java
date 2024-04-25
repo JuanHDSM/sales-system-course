@@ -21,19 +21,25 @@ public class SecurityConfig {
     SecurityFilter securityFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/clients").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/products").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+         http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(HttpMethod.GET, "/clients").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/login/social").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/products").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/auth").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/auth/login/social")
+                .defaultSuccessUrl("/products")
+            );
+
+        return http.build();
     }
 
     @Bean
