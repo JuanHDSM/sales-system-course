@@ -19,8 +19,8 @@ spring:
       client:
         registration:
           google:
-            clientId: 856857708464-1grc5v5gdkihf9456civu19pribp8q0p.apps.googleusercontent.com
-            clientSecret: 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
+            clientId: ${CLIENT_ID}
+            clientSecret: ${CLIENT_SECRET}
 
   jpa:
     properties:
@@ -31,8 +31,3 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
-
-api:
-  security:
-    token:
-      secret: my-secret-key

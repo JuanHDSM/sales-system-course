@@ -21,7 +21,7 @@ public class SecurityConfig {
     SecurityFilter securityFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-         http
+         return http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
@@ -33,13 +33,10 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/auth").permitAll()
                     .anyRequest().authenticated()
             )
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .oauth2Login(oauth2 -> oauth2
-                .loginPage("/auth/login/social")
-                .defaultSuccessUrl("/products")
-            );
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).
+            build();
 
-        return http.build();
+
     }
 
     @Bean
