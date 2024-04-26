@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: "${{MYSQL_URL}}"
-    username: "${{MYSQLUSER}}"
-    password: "${{MYSQLPASSWORD}}"
+    url: ${{MYSQL_URL}}
+    username: ${{MYSQLUSER}}
+    password: ${{MYSQLPASSWORD}}
     driverClassName: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -18,4 +18,4 @@ spring:
 api:
   security:
     token:
-      secret: "${{SECRET-KEY}}"
+      secret: ${{SECRET-KEY}}
