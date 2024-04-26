@@ -1,8 +1,11 @@
 spring:
+  profiles:
+    active: ${APP-PROFILE:dev}
+
   datasource:
-    url: jdbc:${MYSQL_URL}
-    username: ${MYSQLUSER}
-    password: ${MYSQLPASSWORD}
+    url: jdbc:${MYSQL_URL:mysql://localhost:3306/sales_system}
+    username: ${MYSQLUSER:root}
+    password: ${MYSQLPASSWORD:root}
     driverClassName: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -15,7 +18,10 @@ spring:
     hibernate:
       ddl-auto: update
 
+cors:
+  origin: ${CORS-ORIGINS:http://localhost:4200}
+
 api:
   security:
     token:
-      secret: ${SECRET-KEY}
+      secret: ${SECRET-KEY:development-secret-key}
