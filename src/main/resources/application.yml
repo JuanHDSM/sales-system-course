@@ -1,16 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sales_system
-    username: ${USERNAME_DB}
-    password: ${PASSWORD_DB}
+    url: ${{DB-URL}}
+    username: ${{DB-USER}}
+    password: ${{DB-PASSWORD}}
     driverClassName: com.mysql.cj.jdbc.Driver
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: ${CLIENT_ID}
-            clientSecret: ${CLIENT_SECRET}
 
   jpa:
     properties:
@@ -25,4 +18,4 @@ spring:
 api:
   security:
     token:
-      secret: my-secret-key
+      secret: ${{SECRET-KEY}}
