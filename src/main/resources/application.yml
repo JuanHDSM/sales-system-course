@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: ${APP-PROFILE:dev}
-
   datasource:
     url: jdbc:${MYSQL_URL:mysql://localhost:3306/sales_system}
     username: ${MYSQLUSER:root}
