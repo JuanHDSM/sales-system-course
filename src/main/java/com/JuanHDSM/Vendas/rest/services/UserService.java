@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,7 +44,11 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteById(String id) {
-        repository.deleteById(id);
+        User entity = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        repository.deleteById(entity.getId());
     }
 
     public ResponseUserDTO update(RequestUserDTO objDTO, String id) {
@@ -51,6 +56,8 @@ public class UserService implements UserDetailsService {
         User entity = repository.findById(id)
                 .map(user -> {
                             obj.setId(user.getId());
+                            String encryptedPassword = new BCryptPasswordEncoder().encode(obj.getPassword());
+                            obj.setPassword(encryptedPassword);
                             repository.save(obj);
                             return obj;
                         }
