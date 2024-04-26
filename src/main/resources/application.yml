@@ -18,4 +18,4 @@ spring:
 api:
   security:
     token:
-      secret: "${RAILWAY_TOKEN}"
+      secret: "${SECRET-KEY}"
