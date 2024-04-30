@@ -15,6 +15,7 @@ import java.util.List;
 public class ClientController {
     @Autowired
     ClientService service;
+
     @GetMapping
     public List<ResponseClientDTO> findAll() {
         return service.findAll();
