@@ -25,6 +25,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(AUTH_WHITELIST).permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN")
@@ -46,4 +47,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(16);
     }
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "swagger-ui/**",
+            "/swagger-ui.html"
+    };
 }
